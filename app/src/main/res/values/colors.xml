@@ -5,4 +5,5 @@
     <color name="colorAccent">#D81B60</color>
     <color name="titlecolor">#2B2B2B</color>
     <color name="color_icon">#2B2B2B</color>
+    <color name="splashcolor">#ececec</color>
 </resources>
