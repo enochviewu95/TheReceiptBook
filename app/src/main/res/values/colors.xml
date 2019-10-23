@@ -6,4 +6,5 @@
     <color name="titlecolor">#2B2B2B</color>
     <color name="color_icon">#2B2B2B</color>
     <color name="splashcolor">#ececec</color>
+    <color name="splash_back_color">#ffffff</color>
 </resources>

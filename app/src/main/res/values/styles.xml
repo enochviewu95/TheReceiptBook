@@ -13,4 +13,10 @@
         <item name="color">@color/color_icon</item>
     </style>
 
+    <style name="splash_background_logo" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splashbackground</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+
 </resources>
