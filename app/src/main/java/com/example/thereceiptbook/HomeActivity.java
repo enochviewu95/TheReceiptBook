@@ -14,24 +14,43 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.thereceiptbook.FragmentActivities.HomeFragment;
 import com.example.thereceiptbook.FragmentActivities.RecordsFragment;
 import com.example.thereceiptbook.FragmentActivities.SalesFragment;
 import com.example.thereceiptbook.FragmentActivities.TransactionsFragment;
+import com.example.thereceiptbook.LoginSingleton.SharedPrefManager;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private TextView navFullName;
+    private TextView navPhoneNumber;
+    private ImageView navProfilePic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        if(!SharedPrefManager.getInstance(this).isLoggedIn()){
+            finish();
+            startActivity(new Intent(this,LoginActivity.class));
+        }
+
         //Set the application toolbar for the registration activity
         Toolbar toolbar = findViewById(R.id.toolbarNav);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        //Initialization of navigation widgets for drawer layout
+        navFullName = findViewById(R.id.nav_full_name);
+        navPhoneNumber = findViewById(R.id.nav_phone_number);
+        navProfilePic = findViewById(R.id.nav_profile_pic);
+
+
 
         //Navigation drawer
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
@@ -43,6 +62,10 @@ public class HomeActivity extends AppCompatActivity
         //Register the activity with the navigation view as a listener
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //Get user name and phone number from shared preferences
+        navPhoneNumber.setText(SharedPrefManager.getInstance(this).getUserPhoneNumber());
+        navFullName.setText(SharedPrefManager.getInstance(this).getUserFullName());
 
         //Fragment support
         Fragment fragment = new HomeFragment();
@@ -99,6 +122,19 @@ public class HomeActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = new MenuInflater(this);
         inflater.inflate(R.menu.main_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.logging_out:
+                SharedPrefManager.getInstance(this).logout();
+                finish();
+                startActivity(new Intent(this,LoginActivity.class));
+                break;
+        }
         return true;
     }
 }

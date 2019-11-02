@@ -17,8 +17,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.thereceiptbook.LoginSingleton.SharedPrefManager;
 import com.example.thereceiptbook.VolleyClasses.MySingleton;
 import com.example.thereceiptbook.VolleyClasses.MyVolley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +43,6 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
 
         //Initialize the various fields
         fullName = findViewById(R.id.full_name);
@@ -82,16 +85,21 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         progressDialog.dismiss();
-                        if(result.contentEquals("Already Registered")){
-                            Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
-                            requestQueue.stop();
-                        }else{
-
-                            Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
-                            startActivity(intent);
-                            requestQueue.stop();
+                        try{
+                            JSONObject object = new JSONObject(response);
+                            if(!object.getBoolean("error")){
+                                Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }else{
+                                Toast.makeText(getApplicationContext(),
+                                        "Please Check Your Credentials",Toast.LENGTH_LONG).show();
+                            }
+                        }catch (JSONException e){
+                            e.printStackTrace();
                         }
+
+
                     }
                 }, new Response.ErrorListener() {
             @Override

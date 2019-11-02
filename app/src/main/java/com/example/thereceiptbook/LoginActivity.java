@@ -1,10 +1,12 @@
 package com.example.thereceiptbook;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -37,6 +39,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        if(SharedPrefManager.getInstance(this).isLoggedIn()){
+            finish();
+            startActivity(new Intent(this,HomeActivity.class));
+        }
+
         //Initializing the widgets
         phoneNumber = findViewById(R.id.phone_number);
         password = findViewById(R.id.password);
@@ -53,6 +60,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void userLogin(){
+
+        progressDialog.setMessage("Logging In User ...");
+        progressDialog.show();
+
         final String userPhoneNumber = phoneNumber.getText().toString().trim();
         final String userPassword = password.getText().toString().trim();
 
@@ -63,14 +74,22 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        progressDialog.dismiss();
                         try{
                             JSONObject obj = new JSONObject(response);
                             if(!obj.getBoolean("error")){
                                 SharedPrefManager.getInstance(getApplicationContext())
                                         .userLogin(
                                                 obj.getInt("id"),
-                                                obj.getInt("phoneNumber")
+                                                obj.getInt("phone_number"),
+                                                obj.getString("full_name")
                                         );
+                                Toast.makeText(getApplicationContext(),
+                                        "Login Successful",
+                                        Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                                startActivity(intent);
+                                finish();
                             }else{
                                 Toast.makeText(
                                         getApplicationContext(),
@@ -79,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                                 ).show();
                             }
                         }catch (JSONException e){
+                            Log.i("Error","Login Unsuccessful");
                             e.printStackTrace();
                         }
                         requestQueue.stop();
@@ -86,6 +106,10 @@ public class LoginActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(),
+                        Toast.LENGTH_LONG).show();;
                 requestQueue.stop();
             }
         }){
@@ -93,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("phone_number", userPhoneNumber);
-                params.put("password", userPassword);
+                params.put("confirm_password", userPassword);
                 return params;
             }
         };
