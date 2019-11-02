@@ -33,7 +33,6 @@ public class SplashScreen extends AppCompatActivity {
 
     private CircleImageView logo;
     private RelativeLayout splashLayout;
-    private String server_url = "http://192.168.137.1/thereceiptbook/Main.php";
     private ImageLoader imageLoader;
 
     @Override
@@ -83,7 +82,7 @@ public class SplashScreen extends AppCompatActivity {
             public void run() {
 
                 MyVolley myVolley = new MyVolley(SplashScreen.this);
-                myVolley.volleyRequest(server_url,RegisterActivity.class);
+                myVolley.volleyRequest(Constants.URL_SPLASH_SCREEN,RegisterActivity.class);
             }
         },3000);
 

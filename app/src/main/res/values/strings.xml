@@ -28,4 +28,5 @@
     <string name="dummy_text">Name Surname Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</string>
     <string name="create_account">Create An Account</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="login">Login</string>
 </resources>

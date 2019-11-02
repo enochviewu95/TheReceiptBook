@@ -32,8 +32,8 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputEditText userPassword;
     private TextInputEditText confirmUserPassword;
     private ProgressDialog progressDialog;
+    private String result = "Already Registered";
     //private final Class aClass = RegisterActivity.class;
-    private final String pageUrl = "http://192.168.137.1/thereceiptbook/registerUser.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,23 +74,31 @@ public class RegisterActivity extends AppCompatActivity {
         final String userPasswordValue = userPassword.getText().toString().trim();
         final String userConfirmedPassword = confirmUserPassword.getText().toString().trim();
 
-        RequestQueue requestQueue = MySingleton.getInstance(getApplicationContext()).
+        final RequestQueue requestQueue = MySingleton.getInstance(getApplicationContext()).
                 getRequestQueue();
         requestQueue.start();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, pageUrl,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_REGISTER,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         progressDialog.dismiss();
-                        Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
-                        startActivity(intent);
+                        if(result.contentEquals("Already Registered")){
+                            Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
+                            requestQueue.stop();
+                        }else{
+
+                            Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                            startActivity(intent);
+                            requestQueue.stop();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.hide();
                 Toast.makeText(getApplicationContext(),error.getMessage(),Toast.LENGTH_LONG).show();
+                requestQueue.stop();
             }
         }) {
             @Override

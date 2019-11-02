@@ -8,9 +8,13 @@
     android:background="#ececec"
     tools:context=".LoginActivity">
 
-    <include
-        android:id="@+id/toolbarNav"
-        layout="@layout/applicationtoolbar"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/login"/>
 
     <android.support.design.widget.TextInputEditText
         android:id="@+id/phone_number"
@@ -39,6 +43,7 @@
         android:background="@drawable/rounded_edittext"/>
 
     <android.widget.Button
+        android:id="@+id/login_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp"
