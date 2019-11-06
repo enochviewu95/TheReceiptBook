@@ -7,4 +7,5 @@ public class Constants {
     public static final String URL_REGISTER = ROOT_URL+"registerUser.php";
     public static final String URL_SPLASH_SCREEN = ROOT_URL+"Main.php";
     public static final String URL_HOMEFRAGMENT = ROOT_URL+"GetUserTransactions.php";
+    public static final String URL_RECEIPT_ISSUE = ROOT_URL+"InsertTransaction.php";
 }

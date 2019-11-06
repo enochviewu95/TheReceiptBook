@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -38,6 +40,7 @@ public class ReceiptPageActivity extends AppCompatActivity {
     private TextInputEditText amountPaid;
     private TextInputEditText issuersNumber;
     private ProgressDialog progressDialog;
+    private Button issueButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +63,17 @@ public class ReceiptPageActivity extends AppCompatActivity {
         //Progress Dialog definition
         progressDialog = new ProgressDialog(this);
 
-    }
+        //Definition of button for issuance of receipt
+        issueButton = findViewById(R.id.issue_button);
 
+        //Set onClick Listener for the issue button
+        issueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                issueTheReceipt();
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -96,7 +108,7 @@ public class ReceiptPageActivity extends AppCompatActivity {
         final RequestQueue requestQueue = MySingleton.getInstance(getApplicationContext()).
                 getRequestQueue();
         requestQueue.start();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_LOGIN,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_RECEIPT_ISSUE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -104,10 +116,12 @@ public class ReceiptPageActivity extends AppCompatActivity {
                         try{
                             JSONObject object = new JSONObject(response);
                             if(!object.getBoolean("error")){
-                                Intent intent = new Intent(ReceiptPageActivity.this,
-                                        HomeActivity.class);
+                                Toast.makeText(getApplicationContext(),"Receipt issued",Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(ReceiptPageActivity.this,HomeActivity.class);
                                 startActivity(intent);
                                 finish();
+                            }else{
+                                Toast.makeText(getApplicationContext(),object.getString("message"),Toast.LENGTH_LONG).show();
                             }
                         }catch (JSONException e){
                             e.printStackTrace();
