@@ -7,4 +7,5 @@
     <color name="color_icon">#2B2B2B</color>
     <color name="splashcolor">#ececec</color>
     <color name="splash_back_color">#ffffff</color>
+    <color name="registration_text">#42A5F5</color>
 </resources>

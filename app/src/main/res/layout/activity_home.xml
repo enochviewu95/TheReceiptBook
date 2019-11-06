@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ececec"
     tools:context=".HomeActivity">
 
 
@@ -11,6 +12,18 @@
     <include
         android:id="@+id/toolbarNav"
         layout="@layout/applicationtoolbar"/>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:backgroundTint="#ffffff"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/knowhouselogo"
+        android:onClick="issueReceipt"/>
 
     <android.support.v4.widget.DrawerLayout
         android:layout_width="match_parent"
@@ -27,7 +40,9 @@
             <FrameLayout
                 android:id="@+id/content_frame"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                />
+
         </LinearLayout>
 
         <android.support.design.widget.NavigationView
@@ -38,7 +53,6 @@
             app:headerLayout="@layout/nav_header"
             app:menu="@menu/nav_menu"
             />
-
 
     </android.support.v4.widget.DrawerLayout>
 

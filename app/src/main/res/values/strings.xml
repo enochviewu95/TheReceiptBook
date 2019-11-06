@@ -29,4 +29,13 @@
     <string name="create_account">Create An Account</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="login">Login</string>
+    <string name="profile_image">profile image</string>
+    <string name="already_registered">already registered ?</string>
+    <string name="receipt_books">Receipt Book</string>
+    <string name="customer_name">Customer Name</string>
+    <string name="customer_phone_number">Customer Phone NUmber</string>
+    <string name="purchased_items">Purchased Items</string>
+    <string name="amount_ghs">Amount GHS</string>
+    <string name="issue">Issue</string>
+    <string name="receipt_issued_by">Receipt issued by</string>
 </resources>

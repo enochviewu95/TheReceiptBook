@@ -11,9 +11,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.example.thereceiptbook.Adapters.ActivityFeedAdapter;
+import com.example.thereceiptbook.Constants;
 import com.example.thereceiptbook.DummyClass;
 import com.example.thereceiptbook.R;
+import com.example.thereceiptbook.VolleyClasses.MySingleton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +43,7 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         RecyclerView activityFeedRecycler = (RecyclerView) inflater.inflate(
                 R.layout.fragment_home, container, false);
+
 
         int max = DummyClass.dummy_users.length;
 
@@ -54,6 +66,34 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         activityFeedRecycler.setLayoutManager(linearLayoutManager);
         return activityFeedRecycler;
+    }
+
+    private void loadTransactions(){
+        final RequestQueue requestQueue = MySingleton.getInstance(getContext()).getRequestQueue();
+        requestQueue.start();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_HOMEFRAGMENT,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try{
+                            JSONArray obj = new JSONArray(response);
+                            for (int i = 0; i <obj.length() ; i++) {
+                                JSONObject transObject = obj.getJSONObject(i);
+                                int id = transObject.getInt("id");
+                                String userFullName = transObject.getString("full_name");
+                            }
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                        requestQueue.stop();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                requestQueue.stop();
+            }
+        });
+        MySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
     }
 
 }

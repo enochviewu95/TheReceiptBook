@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -33,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText password;
     private Button loginButton;
     private ProgressDialog progressDialog;
+    //private TextView launchRegistrationActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,5 +124,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+    }
+
+    public void launchRegistration(View v){
+        Intent intent = new Intent(this,RegisterActivity.class );
+        startActivity(intent);
+        finish();
     }
 }

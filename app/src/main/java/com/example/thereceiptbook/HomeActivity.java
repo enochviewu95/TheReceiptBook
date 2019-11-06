@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,10 +46,7 @@ public class HomeActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        //Initialization of navigation widgets for drawer layout
-        navFullName = findViewById(R.id.nav_full_name);
-        navPhoneNumber = findViewById(R.id.nav_phone_number);
-        navProfilePic = findViewById(R.id.nav_profile_pic);
+
 
 
 
@@ -63,9 +61,16 @@ public class HomeActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //View headerView = navigationView.getHeaderView(0);
+
+        //Initialization of navigation widgets for drawer layout
+        //navFullName = headerView.findViewById(R.id.nav_full_name);
+        //navPhoneNumber = headerView.findViewById(R.id.nav_phone_number);
+        //navProfilePic = headerView.findViewById(R.id.nav_profile_pic);
+
         //Get user name and phone number from shared preferences
-        navPhoneNumber.setText(SharedPrefManager.getInstance(this).getUserPhoneNumber());
-        navFullName.setText(SharedPrefManager.getInstance(this).getUserFullName());
+        //navPhoneNumber.setText(SharedPrefManager.getInstance(this).getUserPhoneNumber());
+        //navFullName.setText(SharedPrefManager.getInstance(this).getUserFullName());
 
         //Fragment support
         Fragment fragment = new HomeFragment();
@@ -73,6 +78,8 @@ public class HomeActivity extends AppCompatActivity
         ft.add(R.id.content_frame,fragment);
         ft.commit();
     }
+
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -136,5 +143,10 @@ public class HomeActivity extends AppCompatActivity
                 break;
         }
         return true;
+    }
+
+    public void issueReceipt(View v){
+        Intent intent = new Intent(this,ReceiptPageActivity.class);
+        startActivity(intent);
     }
 }
