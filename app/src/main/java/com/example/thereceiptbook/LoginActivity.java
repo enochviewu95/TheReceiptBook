@@ -18,6 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.thereceiptbook.FragmentActivities.HomeFragment;
 import com.example.thereceiptbook.LoginSingleton.SharedPrefManager;
 import com.example.thereceiptbook.VolleyClasses.MySingleton;
 
@@ -90,6 +91,14 @@ public class LoginActivity extends AppCompatActivity {
                                         "Login Successful",
                                         Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+
+                                int id = SharedPrefManager.getInstance(getApplicationContext()).getUserID();
+                                int phoneNumber = SharedPrefManager.getInstance(getApplicationContext()).getUserPhoneNumber();
+                                String fullName = SharedPrefManager.getInstance(getApplicationContext()).getUserFullName();
+
+                                intent.putExtra(HomeFragment.USERID,id);
+                                intent.putExtra(HomeFragment.PHONE_NUMBER,phoneNumber);
+                                intent.putExtra(HomeFragment.FULL_NAME,fullName);
                                 startActivity(intent);
                                 finish();
                             }else{

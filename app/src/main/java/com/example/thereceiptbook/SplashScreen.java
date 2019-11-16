@@ -22,6 +22,7 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
+import com.example.thereceiptbook.FragmentActivities.HomeFragment;
 import com.example.thereceiptbook.LoginSingleton.SharedPrefManager;
 import com.example.thereceiptbook.VolleyClasses.MySingleton;
 import com.example.thereceiptbook.VolleyClasses.MyVolley;
@@ -62,7 +63,17 @@ public class SplashScreen extends AppCompatActivity {
                             public void onResponse(String response) {
                                 if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn()){
                                     finish();
-                                    startActivity(new Intent(getApplicationContext(),HomeActivity.class));
+                                    Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
+
+                                    int id = SharedPrefManager.getInstance(getApplicationContext()).getUserID();
+                                    int phoneNumber = SharedPrefManager.getInstance(getApplicationContext()).getUserPhoneNumber();
+                                    String fullName = SharedPrefManager.getInstance(getApplicationContext()).getUserFullName();
+
+                                    intent.putExtra(HomeFragment.USERID,id);
+                                    intent.putExtra(HomeFragment.PHONE_NUMBER,phoneNumber);
+                                    intent.putExtra(HomeFragment.FULL_NAME,fullName);
+                                    startActivity(intent);
+                                    //startActivity(new Intent(getApplicationContext(),HomeActivity.class));
                                     requestQueue.stop();
                                 }else{
                                     finish();

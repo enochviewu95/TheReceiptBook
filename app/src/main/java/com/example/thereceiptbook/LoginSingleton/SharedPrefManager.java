@@ -61,5 +61,11 @@ public class SharedPrefManager {
         return sharedPreferences.getString(KEY_FULLNAME,null);
     }
 
+    public int getUserID(){
+
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARE_PREF_NAME,Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(KEY_ID,0);
+    }
+
     //TODO: get user profile picture
 }

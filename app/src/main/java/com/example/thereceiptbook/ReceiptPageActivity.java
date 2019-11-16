@@ -21,6 +21,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.thereceiptbook.FragmentActivities.HomeFragment;
 import com.example.thereceiptbook.LoginSingleton.SharedPrefManager;
 import com.example.thereceiptbook.VolleyClasses.MySingleton;
 
@@ -58,7 +59,7 @@ public class ReceiptPageActivity extends AppCompatActivity {
         customerPhoneNumber = findViewById(R.id.customer_phone_number);
         itemPurchased = findViewById(R.id.item_purchased);
         amountPaid = findViewById(R.id.amount_paid);
-        issuersNumber = findViewById(R.id.issuers_number);
+        //issuersNumber = findViewById(R.id.issuers_number);
 
         //Progress Dialog definition
         progressDialog = new ProgressDialog(this);
@@ -99,11 +100,18 @@ public class ReceiptPageActivity extends AppCompatActivity {
         progressDialog.setMessage("Sending receipt...");
         progressDialog.show();
 
+
+
         final String customer_name = customerName.getText().toString().trim();
         final String item_purchased = itemPurchased.getText().toString().trim();
         final String customer_phone_number = customerPhoneNumber.getText().toString().trim();
         final String amount_paid = amountPaid.getText().toString().trim();
-        final String issuers_number = issuersNumber.getText().toString().trim();
+        //final String issuers_number = issuersNumber.getText().toString().trim();
+
+
+        final int id = SharedPrefManager.getInstance(getApplicationContext()).getUserID();
+        final int phoneNumber = SharedPrefManager.getInstance(getApplicationContext()).getUserPhoneNumber();
+        final String fullName = SharedPrefManager.getInstance(getApplicationContext()).getUserFullName();
 
         final RequestQueue requestQueue = MySingleton.getInstance(getApplicationContext()).
                 getRequestQueue();
@@ -116,8 +124,14 @@ public class ReceiptPageActivity extends AppCompatActivity {
                         try{
                             JSONObject object = new JSONObject(response);
                             if(!object.getBoolean("error")){
-                                Toast.makeText(getApplicationContext(),"Receipt issued",Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(ReceiptPageActivity.this,HomeActivity.class);
+
+                                intent.putExtra(HomeFragment.USERID,id);
+                                intent.putExtra(HomeFragment.PHONE_NUMBER,phoneNumber);
+                                intent.putExtra(HomeFragment.FULL_NAME,fullName);
+                                startActivity(intent);
+                                Toast.makeText(getApplicationContext(),"Receipt issued",Toast.LENGTH_LONG).show();
+                                //Intent intent = new Intent(ReceiptPageActivity.this,HomeActivity.class);
                                 startActivity(intent);
                                 finish();
                             }else{
@@ -145,7 +159,7 @@ public class ReceiptPageActivity extends AppCompatActivity {
                 params.put("customers_phone_number",customer_phone_number);
                 params.put("purchased_item",item_purchased);
                 params.put("amount_paid",amount_paid);
-                params.put("receipt_issued_by",issuers_number);
+                params.put("receipt_issued_by",String.valueOf(phoneNumber));
                 return params;
             }
         };
