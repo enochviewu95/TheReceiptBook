@@ -58,7 +58,14 @@ public class RegisterActivity extends AppCompatActivity {
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createUser();
+                if(userPassword.getText().toString().trim()
+                        .equals(confirmUserPassword.getText().
+                                toString().trim())){
+                    createUser();
+                }else{
+                    Toast.makeText(RegisterActivity.this, "Passwords don't match", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 

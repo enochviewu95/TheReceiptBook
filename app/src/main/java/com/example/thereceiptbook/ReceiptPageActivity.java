@@ -91,9 +91,12 @@ public class ReceiptPageActivity extends AppCompatActivity {
                 SharedPrefManager.getInstance(this).logout();
                 finish();
                 startActivity(new Intent(this,LoginActivity.class));
-                break;
+                return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     private void issueTheReceipt(){

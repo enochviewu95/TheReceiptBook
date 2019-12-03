@@ -109,8 +109,6 @@ public class HomeFragment extends Fragment {
                             }
 
                             //Transaction class to handle the information from the database
-                            //TODO: Get Phone number of issuer from shared preference
-                            //TODO: Get Full name of issuer from shared preference
 
                             TransactionsClass transactionsClass = new TransactionsClass(id,fullName,String.valueOf(phoneNumber),
                                     applicationText,date);

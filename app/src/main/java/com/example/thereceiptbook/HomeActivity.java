@@ -31,6 +31,10 @@ public class HomeActivity extends AppCompatActivity
     private TextView navPhoneNumber;
     private ImageView navProfilePic;
 
+    public static final String USERID = "id";
+    public static final String PHONE_NUMBER = "phone_number";
+    public static final String FULL_NAME = "fullName";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,23 +65,33 @@ public class HomeActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //View headerView = navigationView.getHeaderView(0);
+        View headerView = navigationView.getHeaderView(0);
+
+        //Get information from intent
+        Intent intent = getIntent();
+        final int userid = intent.getExtras().getInt(USERID);
+        final int phoneNumber = intent.getExtras().getInt(PHONE_NUMBER);
+        final String  fullName = intent.getExtras().getString(FULL_NAME);
+        String phoneNumberString = "0" + phoneNumber;
+
 
         //Initialization of navigation widgets for drawer layout
-        //navFullName = headerView.findViewById(R.id.nav_full_name);
-        //navPhoneNumber = headerView.findViewById(R.id.nav_phone_number);
+        navFullName = headerView.findViewById(R.id.nav_full_name);
+        navPhoneNumber = headerView.findViewById(R.id.nav_phone_number);
         //navProfilePic = headerView.findViewById(R.id.nav_profile_pic);
 
         //Get user name and phone number from shared preferences
-        //navPhoneNumber.setText(SharedPrefManager.getInstance(this).getUserPhoneNumber());
-        //navFullName.setText(SharedPrefManager.getInstance(this).getUserFullName());
+        navPhoneNumber.setText(phoneNumberString);
+        navFullName.setText(fullName);
 
         //Fragment support
         Fragment fragment = new HomeFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.content_frame,fragment);
+        ft.replace(R.id.content_frame,fragment);
         ft.commit();
     }
+
+
 
 
 
@@ -85,17 +99,25 @@ public class HomeActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int id = menuItem.getItemId();
         Fragment fragment = null;
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Intent intent = null;
 
         switch (id){
             case R.id.transactions:
                 fragment = new TransactionsFragment();
+                ft.replace(R.id.content_frame,fragment);
+                ft.commit();
+
                 break;
             case R.id.sales:
                 fragment = new SalesFragment();
+                ft.replace(R.id.content_frame,fragment);
+                ft.commit();
                 break;
             case R.id.records:
                 fragment = new RecordsFragment();
+                ft.replace(R.id.content_frame,fragment);
+                ft.commit();
                 break;
             case R.id.nav_help:
                 intent = new Intent(this,HelpActivity.class);
@@ -105,6 +127,9 @@ public class HomeActivity extends AppCompatActivity
                 break;
                 default:
                     fragment = new HomeFragment();
+                    ft.replace(R.id.content_frame,fragment);
+                    ft.commit();
+                    break;
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
