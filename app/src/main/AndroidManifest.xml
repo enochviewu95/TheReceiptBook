@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.thereceiptbook">
+    package="com.knowhouse.thereceiptbook">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".UserProfileActivity"
+            android:label="@string/profile"
+            android:parentActivityName=".HomeActivity"></activity>
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -20,11 +22,10 @@
 
         <activity android:name=".HelpActivity" />
         <activity android:name=".FeedbackActivity" />
-
-        <activity android:name=".ReceiptPageActivity"
+        <activity
+            android:name=".ReceiptPageActivity"
             android:label="@string/receipt_books"
-            android:parentActivityName=".HomeActivity"/>
-
+            android:parentActivityName=".HomeActivity" />
         <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +33,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".LoginActivity"
             android:label="Login" />

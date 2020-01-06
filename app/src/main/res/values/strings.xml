@@ -38,4 +38,8 @@
     <string name="amount_ghs">Amount GHS</string>
     <string name="issue">Issue</string>
     <string name="receipt_issued_by">Receipt issued by</string>
+    <string name="profile">Profiles</string>
+    <string name="save">Save</string>
+    <string name="phone_number_edit">Phone</string>
+    <string name="edit">Edit</string>
 </resources>
