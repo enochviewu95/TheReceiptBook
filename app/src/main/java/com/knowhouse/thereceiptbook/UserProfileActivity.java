@@ -1,5 +1,6 @@
 package com.knowhouse.thereceiptbook;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -10,6 +11,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,10 +21,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.knowhouse.thereceiptbook.LoginSingleton.SharedPrefManager;
+import com.knowhouse.thereceiptbook.VolleyClasses.MySingleton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -32,11 +50,22 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private TextInputEditText phoneNumberEditText;
     private TextInputEditText companyNameEditText;
     private Button editButton;
+    private Button saveButton;
+
+    private ProgressDialog progressDialog;
 
     public static final String USERID = "id";
     public static final String PHONE_NUMBER = "phone_number";
     public static final String FULL_NAME = "fullName";
     public static final String COMPANY_NAME = "companyName";
+    public static final String IMAGE_URL = "image";
+
+    private String fullName;
+    private int phoneNumber;
+    private String companyName;
+    private int userid;
+    private String userimageid;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,24 +89,34 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
         //get reference to the button view
         editButton = findViewById(R.id.edit_button);
+        saveButton = findViewById(R.id.save_button);
 
-        Intent intent = getIntent();
-        String fullName = intent.getExtras().getString(FULL_NAME).trim();
-        int phoneNumber = intent.getExtras().getInt(PHONE_NUMBER);
+        //create a progress dialog object
+        progressDialog = new ProgressDialog(this);
+
+        intent = getIntent();
+        userid = intent.getExtras().getInt(USERID);
+        fullName = intent.getExtras().getString(FULL_NAME).trim();
+        phoneNumber = intent.getExtras().getInt(PHONE_NUMBER);
         String phoneNumberString = "0".concat(String.valueOf(phoneNumber));
-        String companyName = intent.getExtras().getString(COMPANY_NAME).trim();
-
+        companyName = intent.getExtras().getString(COMPANY_NAME).trim();
+        String imageUrl = intent.getExtras().getString(IMAGE_URL).trim();
 
         //fullNameDisplay.setText(fullName);
         fullNameEditText.setText(fullName);
         phoneNumberEditText.setText(phoneNumberString);
         companyNameEditText.setText(companyName);
+        Bitmap bitmap = ImageConverter.convertFromStringToImg(imageUrl);
+        profileImageIcon.setImageBitmap(bitmap);
+        profileImageIcon.setEnabled(false);
 
         editButton.setOnClickListener(this);
         profileImageIcon.setOnClickListener(this);
+        saveButton.setOnClickListener(this);
 
     }
 
+    //check for the various on click listeners
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -86,15 +125,20 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 break;
 
             case R.id.save_button:
+                if(fullNameEditText.isEnabled() || phoneNumberEditText.isEnabled()
+                || companyNameEditText.isEnabled()){
+                    saveUserInfo();
+                }else{
+                    Toast.makeText(this,"Information Already Saved",
+                            Toast.LENGTH_LONG).show();
+                }
                 break;
 
             case R.id.edit_button:
                 fullNameEditText.setEnabled(true);
                 phoneNumberEditText.setEnabled(true);
                 companyNameEditText.setEnabled(true);
-                break;
-
-            case R.id.full_name_edittext:
+                profileImageIcon.setEnabled(true);
                 break;
         }
     }
@@ -144,6 +188,73 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //Create a string request for the volley
+    private void saveUserInfo(){
+        progressDialog.setMessage("Saving ...");
+        progressDialog.show();
+
+        //get text in fields
+        final String userPhoneNumber = phoneNumberEditText.getText().toString().trim();
+        final String userFullName = fullNameEditText.getText().toString().trim();
+        final String useridentity = String.valueOf(userid);
+        final String userCompany = companyNameEditText.getText().toString().trim();
+
+        final RequestQueue requestQueue = MySingleton.getInstance(getApplicationContext()).
+                getRequestQueue();
+        requestQueue.start();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_USERPROFILE_UPDATE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        try{
+                            JSONObject obj  = new JSONObject(response);
+                            if(!obj.getBoolean("error")){
+                                Toast.makeText(getApplicationContext(),"Saved",
+                                        Toast.LENGTH_LONG).show();
+
+                                //Logout
+                                finish();
+                                SharedPrefManager.getInstance(getApplicationContext()).logout();
+                                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                            }
+                        }catch (JSONException e){
+                            Log.i("Error","Save unsuccessful");
+                            e.printStackTrace();
+                        }
+                        requestQueue.stop();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(),error.getMessage(),
+                        Toast.LENGTH_LONG).show();
+                requestQueue.stop();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("userid",useridentity);
+                params.put("full_name",userFullName);
+                params.put("phone_number",userPhoneNumber);
+                params.put("image_url",userFullName+userPhoneNumber);
+                params.put("image",imageToString(bitmap));
+                params.put("company",userCompany);
+                return  params;
+            }
+        };
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+    }
+
+    private String imageToString(Bitmap bitmap){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,40,byteArrayOutputStream);
+        byte[] imgBytes = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(imgBytes,Base64.DEFAULT);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.knowhouse.thereceiptbook;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.knowhouse.thereceiptbook.FragmentActivities.HomeFragment;
@@ -24,22 +24,26 @@ import com.knowhouse.thereceiptbook.FragmentActivities.SalesFragment;
 import com.knowhouse.thereceiptbook.FragmentActivities.TransactionsFragment;
 import com.knowhouse.thereceiptbook.LoginSingleton.SharedPrefManager;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private TextView navFullName;
     private TextView navPhoneNumber;
-    private ImageView navProfilePic;
+    private CircleImageView navProfilePic;
 
     public static final String USERID = "id";
     public static final String PHONE_NUMBER = "phone_number";
     public static final String FULL_NAME = "fullName";
     public static final String COMPANY_NAME = "companyName";
+    public static final String IMAGE_URL = "image";
 
     private int userid;
     private int phoneNumber;
     private String  fullName;
     private String companyName;
+    private String imageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,16 +84,19 @@ public class HomeActivity extends AppCompatActivity
         fullName = intent.getExtras().getString(FULL_NAME).trim();
         String phoneNumberString = "0".concat(String.valueOf(phoneNumber));
        companyName = intent.getExtras().getString(COMPANY_NAME).trim();
+       imageUrl = intent.getExtras().getString(IMAGE_URL);
 
 
         //Initialization of navigation widgets for drawer layout
         navFullName = headerView.findViewById(R.id.nav_full_name);
         navPhoneNumber = headerView.findViewById(R.id.nav_phone_number);
-        //navProfilePic = headerView.findViewById(R.id.nav_profile_pic);
+        navProfilePic = headerView.findViewById(R.id.nav_profile_pic);
 
         //Get user name and phone number from shared preferences
         navPhoneNumber.setText(phoneNumberString);
         navFullName.setText(fullName);
+        Bitmap image = ImageConverter.convertFromStringToImg(imageUrl);
+        navProfilePic.setImageBitmap(image);
 
         //Fragment support
         Fragment fragment = new HomeFragment();
@@ -179,6 +186,7 @@ public class HomeActivity extends AppCompatActivity
                 intent.putExtra(UserProfileActivity.PHONE_NUMBER,phoneNumber);
                 intent.putExtra(UserProfileActivity.FULL_NAME,fullName);
                 intent.putExtra(UserProfileActivity.COMPANY_NAME,companyName);
+                intent.putExtra(UserProfileActivity.IMAGE_URL,imageUrl);
                 startActivity(intent);
                 break;
         }

@@ -52,6 +52,11 @@ public class SplashScreen extends AppCompatActivity {
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
+
+                                //SharedPrefManager.getInstance(getApplicationContext()).logout();
+                                //finish();
+                                //startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+
                                 if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn()){
                                     finish();
                                     Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
@@ -60,11 +65,13 @@ public class SplashScreen extends AppCompatActivity {
                                     int phoneNumber = SharedPrefManager.getInstance(getApplicationContext()).getUserPhoneNumber();
                                     String fullName = SharedPrefManager.getInstance(getApplicationContext()).getUserFullName();
                                     String companyName = SharedPrefManager.getInstance(getApplicationContext()).getUserCompany();
+                                    String image = SharedPrefManager.getInstance(getApplicationContext()).getUserImage();
 
-                                    intent.putExtra(HomeFragment.USERID,id);
-                                    intent.putExtra(HomeFragment.PHONE_NUMBER,phoneNumber);
-                                    intent.putExtra(HomeFragment.FULL_NAME,fullName);
-                                    intent.putExtra(HomeFragment.COMPANY_NAME,companyName);
+                                    intent.putExtra(HomeActivity.USERID,id);
+                                    intent.putExtra(HomeActivity.PHONE_NUMBER,phoneNumber);
+                                    intent.putExtra(HomeActivity.FULL_NAME,fullName);
+                                    intent.putExtra(HomeActivity.COMPANY_NAME,companyName);
+                                    intent.putExtra(HomeActivity.IMAGE_URL,image);
                                     startActivity(intent);
                                     //startActivity(new Intent(getApplicationContext(),HomeActivity.class));
                                     requestQueue.stop();

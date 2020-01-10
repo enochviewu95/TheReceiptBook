@@ -6,11 +6,10 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:background="@drawable/drawerbackground">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/nav_profile_pic"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:scaleType="centerCrop"
         android:src="@drawable/people"
         android:layout_margin="10dp"
         android:contentDescription="@string/user_image"/>

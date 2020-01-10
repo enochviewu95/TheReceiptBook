@@ -11,6 +11,7 @@ public class SharedPrefManager {
     private static final String KEY_FULLNAME = "fullname";
     private static final String KEY_ID = "userid";
     private static final String KEY_COMPANY = "company";
+    private static final String KEY_USERIMAGE = "image";
     private SharedPrefManager(Context context){
         mCtx = context;
     }
@@ -22,7 +23,7 @@ public class SharedPrefManager {
         return mInstance;
     }
 
-    public void userLogin(int id,int phoneNumber,String fullname,String companyName){
+    public void userLogin(int id,int phoneNumber,String fullname,String companyName,String imageUrl){
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARE_PREF_NAME,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -31,6 +32,7 @@ public class SharedPrefManager {
         editor.putInt(KEY_PHONENUMBER,phoneNumber);
         editor.putString(KEY_FULLNAME,fullname);
         editor.putString(KEY_COMPANY,companyName);
+        editor.putString(KEY_USERIMAGE,imageUrl);
 
         editor.apply();
     }
@@ -73,5 +75,8 @@ public class SharedPrefManager {
         return sharedPreferences.getString(KEY_COMPANY,null);
     }
 
-    //TODO: get user profile picture
+    public String getUserImage(){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARE_PREF_NAME,Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_USERIMAGE,null);
+    }
 }

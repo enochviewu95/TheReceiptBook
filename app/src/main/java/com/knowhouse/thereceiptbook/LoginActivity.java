@@ -2,6 +2,7 @@ package com.knowhouse.thereceiptbook;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -84,7 +85,8 @@ public class LoginActivity extends AppCompatActivity {
                                                 obj.getInt("id"),
                                                 obj.getInt("phone_number"),
                                                 obj.getString("full_name"),
-                                                obj.getString("company")
+                                                obj.getString("company"),
+                                                obj.getString("image")
                                         );
                                 Toast.makeText(getApplicationContext(),
                                         "Login Successful",
@@ -95,11 +97,14 @@ public class LoginActivity extends AppCompatActivity {
                                 int phoneNumber = SharedPrefManager.getInstance(getApplicationContext()).getUserPhoneNumber();
                                 String fullName = SharedPrefManager.getInstance(getApplicationContext()).getUserFullName();
                                 String companyName = SharedPrefManager.getInstance(getApplicationContext()).getUserCompany();
+                                String image = SharedPrefManager.getInstance(getApplicationContext()).getUserImage();
 
-                                intent.putExtra(HomeFragment.USERID,id);
-                                intent.putExtra(HomeFragment.PHONE_NUMBER,phoneNumber);
-                                intent.putExtra(HomeFragment.FULL_NAME,fullName);
-                                intent.putExtra(HomeFragment.COMPANY_NAME,companyName);
+                                intent.putExtra(HomeActivity.USERID,id);
+                                intent.putExtra(HomeActivity.PHONE_NUMBER,phoneNumber);
+                                intent.putExtra(HomeActivity.FULL_NAME,fullName);
+                                intent.putExtra(HomeActivity.COMPANY_NAME,companyName);
+                                intent.putExtra(HomeActivity.IMAGE_URL,image);
+                                Log.i("Volley","Checking to see if code ends here");
                                 startActivity(intent);
                                 finish();
                             }else{

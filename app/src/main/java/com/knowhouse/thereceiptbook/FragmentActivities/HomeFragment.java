@@ -2,6 +2,7 @@ package com.knowhouse.thereceiptbook.FragmentActivities;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.knowhouse.thereceiptbook.Adapters.ActivityFeedAdapter;
 import com.knowhouse.thereceiptbook.Constants;
+import com.knowhouse.thereceiptbook.ImageConverter;
 import com.knowhouse.thereceiptbook.R;
 import com.knowhouse.thereceiptbook.TransactionsClass;
 import com.knowhouse.thereceiptbook.VolleyClasses.MySingleton;
@@ -42,6 +44,7 @@ public class HomeFragment extends Fragment {
     public static final String PHONE_NUMBER = "phone_number";
     public static final String FULL_NAME = "fullName";
     public static final String COMPANY_NAME = "companyName";
+    public static final String IMAGE_URL = "image";
 
     public HomeFragment() {
         // Required empty public constructor
@@ -82,6 +85,8 @@ public class HomeFragment extends Fragment {
         final int phoneNumber = intent.getExtras().getInt(PHONE_NUMBER);
         final String  fullName = intent.getExtras().getString(FULL_NAME);
         final String companyName = intent.getExtras().getString(COMPANY_NAME);
+        final String image_url = intent.getExtras().getString(IMAGE_URL);
+        final Bitmap bitmap = ImageConverter.convertFromStringToImg(image_url);
         final RequestQueue requestQueue = MySingleton.getInstance(getContext()).getRequestQueue();
         requestQueue.start();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_HOMEFRAGMENT,
@@ -110,7 +115,7 @@ public class HomeFragment extends Fragment {
                             //Transaction class to handle the information from the database
 
                             TransactionsClass transactionsClass = new TransactionsClass(id,fullName,String.valueOf(phoneNumber),
-                                    applicationText,date);
+                                    applicationText,date,bitmap);
                             ActivityFeedAdapter adapter = new ActivityFeedAdapter(transactionsClass);
                             activityFeedRecycler.setAdapter(adapter);
                             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

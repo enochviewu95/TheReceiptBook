@@ -1,5 +1,6 @@
 package com.knowhouse.thereceiptbook.Adapters;
 
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -11,13 +12,15 @@ import android.widget.TextView;
 import com.knowhouse.thereceiptbook.R;
 import com.knowhouse.thereceiptbook.TransactionsClass;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ActivityFeedAdapter extends
         RecyclerView.Adapter<ActivityFeedAdapter.ViewHolder> {
 
     private String full_name;
     private String userPhoneNumber;
     private String[] date;
-    private int[] user_imageid;
+    private Bitmap user_image;
     private int[] customer_imageid;
     private String[] app_text;
 
@@ -36,7 +39,7 @@ public class ActivityFeedAdapter extends
         this.full_name = transactionsClass.getFullName();
         this.userPhoneNumber = transactionsClass.getPhoneNumber();
         this.date = transactionsClass.getDate();
-        this.user_imageid = null;
+        this.user_image = transactionsClass.getImage();
         this.customer_imageid = null;
         this.app_text = transactionsClass.getTransactions();
     }
@@ -62,6 +65,7 @@ public class ActivityFeedAdapter extends
         TextView app_textview = cardView.findViewById(R.id.info_text);
         TextView user_phone_number = cardView.findViewById(R.id.user_phone_number);
         TextView time_of_issue = cardView.findViewById(R.id.time_of_issue);
+        CircleImageView user_images = cardView.findViewById(R.id.profile_image);
 
         //append 0 to the phone number
         String phoneNumberString = "0"+ String.valueOf(userPhoneNumber);
@@ -70,7 +74,7 @@ public class ActivityFeedAdapter extends
         user_phone_number.setText(phoneNumberString);
         app_textview.setText(app_text[i]);
         time_of_issue.setText(date[i]);
-        //userimage.setImageDrawable(userDrawable);
+        user_images.setImageBitmap(user_image);
         //customerimage.setImageDrawable(customerDrawable);
 
     }

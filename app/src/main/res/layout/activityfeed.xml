@@ -70,7 +70,8 @@
                 android:layout_height="45dp"
                 android:src="@drawable/ic_launcher_background"
                 android:layout_margin="10dp"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                android:visibility="invisible"/>
 
             <TextView
                 android:id="@+id/info_text"
