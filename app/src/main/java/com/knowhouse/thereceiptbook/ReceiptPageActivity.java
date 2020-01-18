@@ -114,6 +114,8 @@ public class ReceiptPageActivity extends AppCompatActivity {
         final int id = SharedPrefManager.getInstance(getApplicationContext()).getUserID();
         final int phoneNumber = SharedPrefManager.getInstance(getApplicationContext()).getUserPhoneNumber();
         final String fullName = SharedPrefManager.getInstance(getApplicationContext()).getUserFullName();
+        final String companyName = SharedPrefManager.getInstance(getApplicationContext()).getUserCompany();
+        final String image_url = SharedPrefManager.getInstance(getApplicationContext()).getUserImage();
 
         final RequestQueue requestQueue = MySingleton.getInstance(getApplicationContext()).
                 getRequestQueue();
@@ -131,7 +133,9 @@ public class ReceiptPageActivity extends AppCompatActivity {
                                 intent.putExtra(HomeFragment.USERID,id);
                                 intent.putExtra(HomeFragment.PHONE_NUMBER,phoneNumber);
                                 intent.putExtra(HomeFragment.FULL_NAME,fullName);
-                                startActivity(intent);
+                                intent.putExtra(HomeFragment.COMPANY_NAME,companyName);
+                                intent.putExtra(HomeFragment.IMAGE_URL,image_url);
+                                //startActivity(intent);
                                 Toast.makeText(getApplicationContext(),"Receipt issued",Toast.LENGTH_LONG).show();
                                 //Intent intent = new Intent(ReceiptPageActivity.this,HomeActivity.class);
                                 startActivity(intent);
