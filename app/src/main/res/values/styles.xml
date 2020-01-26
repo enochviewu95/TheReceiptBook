@@ -16,6 +16,7 @@
     <style name="splash_background_logo" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splashbackground</item>
         <item name="android:windowFullscreen">true</item>
+        <item name="android:layout_centerInParent">true</item>
     </style>
 
 
